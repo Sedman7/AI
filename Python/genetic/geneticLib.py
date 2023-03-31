@@ -1,13 +1,5 @@
-# кинуть файл my.py в content и потом подключить через импорт - пока это делать не нужно, весь код интегрирован сюда...
-# import my
-# my.Hi()
-
 import random
 import copy
-
-
-# import os
-# from IPython.display import clear_output
 
 class NN:
     # *****************************************************************************************************************#
@@ -280,26 +272,7 @@ class NN:
     # testExpect = []   #ожидаемый результат для каждого набора входящих для теста
     # =================================================================================================================
     def initDataset(self):
-        # учим сеть сложению
         # #заполняем обущающий дата-сет
-        # tmpA = [0,0,0,1]; self.learnDataSet.append(tmpA); self.learnExpect.append(1)
-        # tmpA = [0,0,1,0]; self.learnDataSet.append(tmpA); self.learnExpect.append(1)
-        # tmpA = [0,0,1,1]; self.learnDataSet.append(tmpA); self.learnExpect.append(2)
-        # tmpA = [0,1,0,0]; self.learnDataSet.append(tmpA); self.learnExpect.append(1)
-        # tmpA = [0,1,0,1]; self.learnDataSet.append(tmpA); self.learnExpect.append(2)
-        # tmpA = [0,1,1,0]; self.learnDataSet.append(tmpA); self.learnExpect.append(2)
-        # tmpA = [0,1,1,1]; self.learnDataSet.append(tmpA); self.learnExpect.append(3)
-        # tmpA = [1,1,1,0]; self.learnDataSet.append(tmpA); self.learnExpect.append(3)
-        # tmpA = [1,1,0,0]; self.learnDataSet.append(tmpA); self.learnExpect.append(2)
-        # tmpA = [1,1,1,1]; self.learnDataSet.append(tmpA); self.learnExpect.append(4)
-
-        # #заполняем тестовый дата-сет
-        # tmpA = [3,1,0,9]; self.testDataSet.append(tmpA); self.testExpect.append(13)
-        # tmpA = [0,1,7,2]; self.testDataSet.append(tmpA); self.testExpect.append(10)
-        # tmpA = [9,1,9,5]; self.testDataSet.append(tmpA); self.testExpect.append(24)
-        # tmpA = [0,0,0,0]; self.testDataSet.append(tmpA); self.testExpect.append(0)
-        # tmpA = [9,9,9,9]; self.testDataSet.append(tmpA); self.testExpect.append(36)
-
         # учим сеть конвертации двоичная в десятичная
         # #заполняем обущающий дата-сет
         tmpA = [0, 0, 0, 1]; self.learnDataSet.append(tmpA); self.learnExpect.append(1)
@@ -332,74 +305,4 @@ class NN:
             self.valExpect = self.testExpect
     # -------------------------------------- End of SetDataset --------------------------------------------------------
 
-# ********************************************************************************************************************#
-#                         Рабочая часть                                                                               #
-# ********************************************************************************************************************#
-# создаем первичную нейронную сеть
-net = NN()  # создаем потомок класса
-net.iCreate(4, [8], 1)  # инициализируем сеть
-net.inValues = [1, 1, 1, 1]  # устанавливаем начальные значения входных нейронов
-# net.netCalc()            #проводим расчет сети
-net.showNet()  # Отобразить нейронку
 
-# тут будем хранить конфигурацию изначальной нейронной сети для сравнения с результатом
-fst = NN()
-fst = copy.deepcopy(net)  # копируем нашу сеть
-
-# формируем цикл для пошагового обучения сети
-k = ''
-epoch = 0
-
-while k != '999':
-
-    # os.system('cls||clear')  # очистим консоль
-    # clear_output()
-
-    if k == '9':
-        net.setDataset(1)
-        net.learnNet(9)
-
-    # обучаем сеть
-    if k == '0':  # 1 цикл обучения без отображения
-        epoch = epoch + 1
-        net.setDataset(0)  # вызываем процедуру формирования обучающего датасета
-        net.learnNet(0)
-
-    if k == '1':  # 1 цикл обучения с отображением структуры
-        epoch = epoch + 1
-        net.setDataset(0)  # вызываем процедуру формирования обучающего датасета
-        net.learnNet(1)
-
-    if k == '2':  # 1 цикл обучения с отображением комментариев
-        epoch = epoch + 1
-        net.setDataset(0)  # вызываем процедуру формирования обучающего датасета
-        net.learnNet(2)
-
-    if k == '3':  # 1 цикл обучения с отображением структуры и комментариев
-        epoch = epoch + 1
-        net.setDataset(0)  # вызываем процедуру формирования обучающего датасета
-        net.learnNet(3)
-
-    if k == '10':  # 10 циклов обучения без отображения
-        net.setDataset(0)  # вызываем процедуру формирования обучающего датасета
-        epoch = epoch + 10
-        for i in range(0, 10):
-            net.learnNet(0)
-
-    if k == '100':  # 100 циклов обучения без отображения
-        net.setDataset(0)  # вызываем процедуру формирования обучающего датасета
-        epoch = epoch + 100
-        for i in range(0, 100):
-            net.learnNet(0)
-
-    if k == '1000':  # 1000 циклов обучения без отображения
-        net.setDataset(0)  # вызываем процедуру формирования обучающего датасета
-        epoch = epoch + 1000
-        for i in range(0, 100):
-            net.learnNet(0)
-
-    if k == '1008':  # 1008 - показать сеть
-        net.showNet()
-
-    print('------------------------------------- Эпоха обучения: ', str(epoch), '-------------------------------------')
-    k = input('цикл обучения: 0 - без инфо; 1 - структура; 2 - комменты; 3 - структура + комменты \n100, 1000 - 100 или 1000 циклов обучения в тихом режиме; 1008-показать сеть \n 9 - контроль \n999 - выход:')
