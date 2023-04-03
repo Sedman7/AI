@@ -1,0 +1,2 @@
+Изначальные значения слов
+http://opencorpora.org/dict.php 

@@ -21,9 +21,9 @@ class NN:
 
     # наборы данных для обучения и проверки сети
     learnDataSet = []  # обучающая выборка состоит из набора разных inValues[]
-    learnExpect = []   # ожидаемый результат для каждого набора входящих для обучения
+  #  learnExpect = []   # ожидаемый результат для каждого набора входящих для обучения
     testDataSet = []   # контрольная выборка состоит из набора разных inValues[]
-    testExpect = []    # ожидаемый результат для каждого набора входящих для теста
+  #  testExpect = []    # ожидаемый результат для каждого набора входящих для теста
 
     valInValues = []   # входящие параметры - сюда кидаем или данные из valInValues или из testDataSet
     valExpect = []     # ожидаемый результат для каждого valInValues[] или testDataSet[]
@@ -90,8 +90,7 @@ class NN:
 
             # формируем массивы для всех скрытых слоев
             if i > 0 and i < Layers - 1:
-                for j in range(0,
-                               NeronLayerP[i - 1]):  # заполняем нулями на количество нейронов последнего скрытого слоя
+                for j in range(0, NeronLayerP[i - 1]):  # заполняем нулями на количество нейронов последнего скрытого слоя
                     tmpA = []  # обнуляем временный массив
                     for k in range(0, NeronLayerP[i]):  # заполняем нулями на количество выходных значений
                         tmpA.append(self.initVal(minVal, maxVal, precVal))
@@ -178,7 +177,6 @@ class NN:
 
         # подготавливаем массивы
         self.prepareArrays(inValuesP, NeronLayerP, outValuesP, -1, 1, 2)
-
     # -------------------------------------- End of iCreate -----------------------------------------------------------
 
     # ======================================  процедура корректировки весов Link у наследников ========================
@@ -193,7 +191,6 @@ class NN:
             for j in range(len(self.Links[i])):
                 k = self.initVal(-1, 1, 10)
                 self.Links[i][j] = self.Links[i][j] + k / divVal
-
     # -------------------------------------- End of InhReLink ---------------------------------------------------------
 
     # ======================================  функция рассчета ошибки =================================================
@@ -226,25 +223,26 @@ class NN:
     # =================================================================================================================
     def learnNet(self, show):
         global net
-        if show == 2 or show == 3 or show == 9:
+
+        if show in (2, 3, 9):
             print('\n Начинаем обучение сети \nКоличество входящих значений: ', str(len(net.inValues)))
             print('Количество обучающих дата-сетов: ', str(len(self.valInValues)))  # + valExpect
 
         for i in range(len(self.valInValues)):  # перебираем весь обучающий дата-сет, проводя одну эпоху обучения
-            net.inValues = self.valInValues[i]  # устанавливаем i-й датасет для обучения
-            net.netCalc()
-            Err = net.calcError(self.valExpect[i])  # высчитываем ошибку для i-го ожидаемого результата
+            net.inValues = self.valInValues[i][0]   # устанавливаем i-й датасет для обучения
+            net.netCalc()                           # расчитываем сеть
+            Err = net.calcError(self.valInValues[i][1])  # высчитываем ошибку для i-го ожидаемого результата
 
-            if show == 2 or show == 3 or show == 9:
-                if self.valExpect[i] != 0:  # вычисляем точность в %
-                    ErrPrc = round(net.outValues[0] * 100 / self.valExpect[i], 2)
+            if show in (2, 3, 9):
+                if self.valInValues[i][1] != 0:  # вычисляем точность в %
+                    ErrPrc = round(net.outValues[0] * 100 / self.valInValues[i][1], 2)
                 else:
                     ErrPrc = 0
-                print(self.valInValues[i], ' Выборка ', str(i + 1), ' из ', str(len(self.valInValues)), ' Ответ:',
-                      str(net.outValues[0]), ' ожидаем:', str(self.valExpect[i]), ' Error = ', str(round(Err, 2)), ' (',
+                print(self.valInValues[i][0], ' Выборка ', str(i + 1), ' из ', str(len(self.valInValues)), ' Ответ:',
+                      str(net.outValues[0]), ' ожидаем:', str(self.valInValues[i][1]), ' Error = ', str(round(Err, 2)), ' (',
                       str(ErrPrc), '%)')
 
-            if show == 1 or show == 3:
+            if show in (1, 3):
                 net.showNet()
 
             if show != 9:  # 9 - просмотровый режим, в нем сеть не обучаем
@@ -256,7 +254,7 @@ class NN:
                     Inh[j] = copy.deepcopy(net)     # копируем потомку нашу сеть
                     Inh[j].InhReLink(100)           # модифицируем для него линки +/- 1/100
                     Inh[j].netCalc()                # проводим расчет сети потомка
-                    InhErr = Inh[j].calcError(self.valExpect[i])  # расчет ошибки
+                    InhErr = Inh[j].calcError(self.valInValues[i][1])  # расчет ошибки
 
                     if InhErr < Err:
                         BestInh = j  # устанавливаем "Лучшим" № наследника если у него ошибка меньше чем у исходной сети или предыдущего
@@ -302,18 +300,29 @@ class NN:
 
         # учим сеть конвертации двоичная в десятичная
         # #заполняем обущающий дата-сет
-        tmpA = [0, 0, 0, 1]; self.learnDataSet.append(tmpA); self.learnExpect.append(1)
-        tmpA = [0, 0, 1, 0]; self.learnDataSet.append(tmpA); self.learnExpect.append(2)
-        tmpA = [0, 1, 0, 0]; self.learnDataSet.append(tmpA); self.learnExpect.append(4)
-        tmpA = [1, 0, 0, 0]; self.learnDataSet.append(tmpA); self.learnExpect.append(8)
-        tmpA = [1, 0, 0, 1]; self.learnDataSet.append(tmpA); self.learnExpect.append(9)
-        tmpA = [0, 1, 1, 0]; self.learnDataSet.append(tmpA); self.learnExpect.append(6)
+        # tmpA = [0, 0, 0, 1]; self.learnDataSet.append(tmpA); #self.learnExpect.append(1)
+        # tmpA = [0, 0, 1, 0]; self.learnDataSet.append(tmpA); #self.learnExpect.append(2)
+        # tmpA = [0, 1, 0, 0]; self.learnDataSet.append(tmpA); #self.learnExpect.append(4)
+        # tmpA = [1, 0, 0, 0]; self.learnDataSet.append(tmpA); #self.learnExpect.append(8)
+        # tmpA = [1, 0, 0, 1]; self.learnDataSet.append(tmpA); #self.learnExpect.append(9)
+        # tmpA = [0, 1, 1, 0]; self.learnDataSet.append(tmpA); #self.learnExpect.append(6)
+        self.learnDataSet.append([[0, 0, 0, 1], 1])
+        self.learnDataSet.append([[0, 0, 1, 0], 2])
+        self.learnDataSet.append([[0, 1, 0, 0], 4])
+        self.learnDataSet.append([[1, 0, 0, 0], 8])
+        self.learnDataSet.append([[1, 0, 0, 1], 9])
+        self.learnDataSet.append([[0, 1, 1, 0], 6])
 
         # #заполняем тестовый дата-сет
-        tmpA = [0, 1, 1, 1]; self.testDataSet.append(tmpA); self.testExpect.append(7)
-        tmpA = [1, 1, 0, 0]; self.testDataSet.append(tmpA); self.testExpect.append(12)
-        tmpA = [1, 0, 1, 0]; self.testDataSet.append(tmpA); self.testExpect.append(10)
-        tmpA = [1, 1, 1, 0]; self.testDataSet.append(tmpA); self.testExpect.append(14)
+        # tmpA = [0, 1, 1, 1]; self.testDataSet.append(tmpA); #self.testExpect.append(7)
+        # tmpA = [1, 1, 0, 0]; self.testDataSet.append(tmpA); #self.testExpect.append(12)
+        # tmpA = [1, 0, 1, 0]; self.testDataSet.append(tmpA); #self.testExpect.append(10)
+        # tmpA = [1, 1, 1, 0]; self.testDataSet.append(tmpA); #self.testExpect.append(14)
+        self.testDataSet.append([[0, 1, 1, 1], 7])
+        self.testDataSet.append([[1, 1, 0, 0], 12])
+        self.testDataSet.append([[1, 0, 1, 0], 10])
+        self.testDataSet.append([[1, 1, 1, 0], 14])
+        self.testDataSet.append([[1, 1, 1, 1], 15])
     # -------------------------------------- End of SetDataset --------------------------------------------------------
 
     # ======================================  функция формирования обучающего датасета ================================
@@ -321,15 +330,15 @@ class NN:
     # =================================================================================================================
     def setDataset(self, inData):
         self.valInValues = []
-        self.valExpect = []
+        #self.valExpect = []
 
         if inData == 0:
             self.valInValues = self.learnDataSet
-            self.valExpect = self.learnExpect
+            #self.valExpect = self.learnExpect
 
         if inData == 1:
             self.valInValues = self.testDataSet
-            self.valExpect = self.testExpect
+            #self.valExpect = self.testExpect
     # -------------------------------------- End of SetDataset --------------------------------------------------------
 
 # ********************************************************************************************************************#
