@@ -208,9 +208,10 @@ class NN:
 
     # ======================================  функция обучения сети ===================================================
     # show = 0 - ничего не показывать  1 - показывать showNet() 2 показывать showNet() + комменты
+    # 9 - просмотр, без обучения
     # =================================================================================================================
-    def learnNet(self, show):
-        global net
+    def learnNet(self, net, show):
+        #global net
 
         if show in (2, 3, 9):
             print('\n Начинаем обучение сети \nКоличество входящих значений: ', str(len(net.inValues)))
@@ -257,30 +258,53 @@ class NN:
             if show == 3:
                 print('Best = ', str(BestInh))
                 print(' --- ')
+
+        return net
     # -------------------------------------- End of learnNet ----------------------------------------------------------
+
+    # =======================================  функция дополнения данными =============================================
+    # обучающего = 0 или тестового = 1 датасета
+    # =================================================================================================================
+    def addToDataset(self, dataSet, arr):
+        # учим сеть конвертации двоичная в десятичная
+        # #заполняем обущающий дата-сет
+        if dataSet == 0:
+            self.learnDataSet.append(arr)
+
+        if dataSet == 1:
+            self.testDataSet.append(arr)
+
+    # -------------------------------------- End of SetDataset --------------------------------------------------------
 
     # ======================================  функция заполнения данными обучающей и тестовой =========================
     # learnDataSet = [] #обучающая выборка состоит из набора разных inValues[]
-    # learnExpect = []  #ожидаемый результат для каждого набора входящих для обучения
     # testDataSet = []  #контрольная выборка состоит из набора разных inValues[]
-    # testExpect = []   #ожидаемый результат для каждого набора входящих для теста
     # =================================================================================================================
     def initDataset(self):
         # учим сеть конвертации двоичная в десятичная
         # #заполняем обущающий дата-сет
-        self.learnDataSet.append([[0, 0, 0, 1], 1])
-        self.learnDataSet.append([[0, 0, 1, 0], 2])
-        self.learnDataSet.append([[0, 1, 0, 0], 4])
-        self.learnDataSet.append([[1, 0, 0, 0], 8])
-        self.learnDataSet.append([[1, 0, 0, 1], 9])
-        self.learnDataSet.append([[0, 1, 1, 0], 6])
+        self.addToDataset(0, [[0, 0, 0, 1], 1])
+        self.addToDataset(0, [[0, 1, 0, 0], 4])
+        self.addToDataset(0, [[1, 0, 0, 0], 8])
+        self.addToDataset(0, [[1, 0, 0, 1], 9])
+        self.addToDataset(0, [[0, 1, 1, 0], 6])
+        # self.learnDataSet.append([[0, 0, 1, 0], 2])
+        # self.learnDataSet.append([[0, 1, 0, 0], 4])
+        # self.learnDataSet.append([[1, 0, 0, 0], 8])
+        # self.learnDataSet.append([[1, 0, 0, 1], 9])
+        # self.learnDataSet.append([[0, 1, 1, 0], 6])
 
         # #заполняем тестовый дата-сет
-        self.testDataSet.append([[0, 1, 1, 1], 7])
-        self.testDataSet.append([[1, 1, 0, 0], 12])
-        self.testDataSet.append([[1, 0, 1, 0], 10])
-        self.testDataSet.append([[1, 1, 1, 0], 14])
-        self.testDataSet.append([[1, 1, 1, 1], 15])
+        self.addToDataset(1, [[0, 1, 1, 1], 7])
+        self.addToDataset(1, [[1, 1, 0, 0], 12])
+        self.addToDataset(1, [[1, 0, 1, 0], 10])
+        self.addToDataset(1, [[1, 1, 1, 0], 14])
+        self.addToDataset(1, [[1, 1, 1, 1], 15])
+        # self.testDataSet.append([[0, 1, 1, 1], 7])
+        # self.testDataSet.append([[1, 1, 0, 0], 12])
+        # self.testDataSet.append([[1, 0, 1, 0], 10])
+        # self.testDataSet.append([[1, 1, 1, 0], 14])
+        # self.testDataSet.append([[1, 1, 1, 1], 15])
     # -------------------------------------- End of SetDataset --------------------------------------------------------
 
     # ======================================  функция формирования обучающего датасета ================================

@@ -221,8 +221,8 @@ class NN:
     # ======================================  функция обучения сети ===================================================
     # show = 0 - ничего не показывать  1 - показывать showNet() 2 показывать showNet() + комменты
     # =================================================================================================================
-    def learnNet(self, show):
-        global net
+    def learnNet(self, net, show):
+        #global net
 
         if show in (2, 3, 9):
             print('\n Начинаем обучение сети \nКоличество входящих значений: ', str(len(net.inValues)))
@@ -269,60 +269,53 @@ class NN:
             if show == 3:
                 print('Best = ', str(BestInh))
                 print(' --- ')
+
+        return net
     # -------------------------------------- End of learnNet ----------------------------------------------------------
+
+    # =======================================  функция дополнения данными =============================================
+    # обучающего = 0 или тестового = 1 датасета
+    # =================================================================================================================
+    def addToDataset(self, dataSet, arr):
+        # учим сеть конвертации двоичная в десятичная
+        # #заполняем обущающий дата-сет
+        if dataSet == 0:
+            self.learnDataSet.append(arr)
+
+        if dataSet == 1:
+            self.testDataSet.append(arr)
+
+    # -------------------------------------- End of SetDataset --------------------------------------------------------
 
     # ======================================  функция заполнения данными обучающей и тестовой =========================
     # learnDataSet = [] #обучающая выборка состоит из набора разных inValues[]
-    # learnExpect = []  #ожидаемый результат для каждого набора входящих для обучения
     # testDataSet = []  #контрольная выборка состоит из набора разных inValues[]
-    # testExpect = []   #ожидаемый результат для каждого набора входящих для теста
     # =================================================================================================================
     def initDataset(self):
-        # учим сеть сложению
-        # #заполняем обущающий дата-сет
-        # tmpA = [0,0,0,1]; self.learnDataSet.append(tmpA); self.learnExpect.append(1)
-        # tmpA = [0,0,1,0]; self.learnDataSet.append(tmpA); self.learnExpect.append(1)
-        # tmpA = [0,0,1,1]; self.learnDataSet.append(tmpA); self.learnExpect.append(2)
-        # tmpA = [0,1,0,0]; self.learnDataSet.append(tmpA); self.learnExpect.append(1)
-        # tmpA = [0,1,0,1]; self.learnDataSet.append(tmpA); self.learnExpect.append(2)
-        # tmpA = [0,1,1,0]; self.learnDataSet.append(tmpA); self.learnExpect.append(2)
-        # tmpA = [0,1,1,1]; self.learnDataSet.append(tmpA); self.learnExpect.append(3)
-        # tmpA = [1,1,1,0]; self.learnDataSet.append(tmpA); self.learnExpect.append(3)
-        # tmpA = [1,1,0,0]; self.learnDataSet.append(tmpA); self.learnExpect.append(2)
-        # tmpA = [1,1,1,1]; self.learnDataSet.append(tmpA); self.learnExpect.append(4)
-
-        # #заполняем тестовый дата-сет
-        # tmpA = [3,1,0,9]; self.testDataSet.append(tmpA); self.testExpect.append(13)
-        # tmpA = [0,1,7,2]; self.testDataSet.append(tmpA); self.testExpect.append(10)
-        # tmpA = [9,1,9,5]; self.testDataSet.append(tmpA); self.testExpect.append(24)
-        # tmpA = [0,0,0,0]; self.testDataSet.append(tmpA); self.testExpect.append(0)
-        # tmpA = [9,9,9,9]; self.testDataSet.append(tmpA); self.testExpect.append(36)
-
         # учим сеть конвертации двоичная в десятичная
         # #заполняем обущающий дата-сет
-        # tmpA = [0, 0, 0, 1]; self.learnDataSet.append(tmpA); #self.learnExpect.append(1)
-        # tmpA = [0, 0, 1, 0]; self.learnDataSet.append(tmpA); #self.learnExpect.append(2)
-        # tmpA = [0, 1, 0, 0]; self.learnDataSet.append(tmpA); #self.learnExpect.append(4)
-        # tmpA = [1, 0, 0, 0]; self.learnDataSet.append(tmpA); #self.learnExpect.append(8)
-        # tmpA = [1, 0, 0, 1]; self.learnDataSet.append(tmpA); #self.learnExpect.append(9)
-        # tmpA = [0, 1, 1, 0]; self.learnDataSet.append(tmpA); #self.learnExpect.append(6)
-        self.learnDataSet.append([[0, 0, 0, 1], 1])
-        self.learnDataSet.append([[0, 0, 1, 0], 2])
-        self.learnDataSet.append([[0, 1, 0, 0], 4])
-        self.learnDataSet.append([[1, 0, 0, 0], 8])
-        self.learnDataSet.append([[1, 0, 0, 1], 9])
-        self.learnDataSet.append([[0, 1, 1, 0], 6])
+        self.addToDataset(0, [[0, 0, 0, 1], 1])
+        self.addToDataset(0, [[0, 1, 0, 0], 4])
+        self.addToDataset(0, [[1, 0, 0, 0], 8])
+        self.addToDataset(0, [[1, 0, 0, 1], 9])
+        self.addToDataset(0, [[0, 1, 1, 0], 6])
+        # self.learnDataSet.append([[0, 0, 1, 0], 2])
+        # self.learnDataSet.append([[0, 1, 0, 0], 4])
+        # self.learnDataSet.append([[1, 0, 0, 0], 8])
+        # self.learnDataSet.append([[1, 0, 0, 1], 9])
+        # self.learnDataSet.append([[0, 1, 1, 0], 6])
 
         # #заполняем тестовый дата-сет
-        # tmpA = [0, 1, 1, 1]; self.testDataSet.append(tmpA); #self.testExpect.append(7)
-        # tmpA = [1, 1, 0, 0]; self.testDataSet.append(tmpA); #self.testExpect.append(12)
-        # tmpA = [1, 0, 1, 0]; self.testDataSet.append(tmpA); #self.testExpect.append(10)
-        # tmpA = [1, 1, 1, 0]; self.testDataSet.append(tmpA); #self.testExpect.append(14)
-        self.testDataSet.append([[0, 1, 1, 1], 7])
-        self.testDataSet.append([[1, 1, 0, 0], 12])
-        self.testDataSet.append([[1, 0, 1, 0], 10])
-        self.testDataSet.append([[1, 1, 1, 0], 14])
-        self.testDataSet.append([[1, 1, 1, 1], 15])
+        self.addToDataset(1, [[0, 1, 1, 1], 7])
+        self.addToDataset(1, [[1, 1, 0, 0], 12])
+        self.addToDataset(1, [[1, 0, 1, 0], 10])
+        self.addToDataset(1, [[1, 1, 1, 0], 14])
+        self.addToDataset(1, [[1, 1, 1, 1], 15])
+        # self.testDataSet.append([[0, 1, 1, 1], 7])
+        # self.testDataSet.append([[1, 1, 0, 0], 12])
+        # self.testDataSet.append([[1, 0, 1, 0], 10])
+        # self.testDataSet.append([[1, 1, 1, 0], 14])
+        # self.testDataSet.append([[1, 1, 1, 1], 15])
     # -------------------------------------- End of SetDataset --------------------------------------------------------
 
     # ======================================  функция формирования обучающего датасета ================================
@@ -366,46 +359,46 @@ while k != '999':
 
     if k == '9':
         net.setDataset(1)
-        net.learnNet(9)
+        net = net.learnNet(net, 9)
 
     # обучаем сеть
     if k == '0':  # 1 цикл обучения без отображения
         epoch = epoch + 1
         net.setDataset(0)  # вызываем процедуру формирования обучающего датасета
-        net.learnNet(0)
+        net = net.learnNet(net, 0)
 
     if k == '1':  # 1 цикл обучения с отображением структуры
         epoch = epoch + 1
         net.setDataset(0)  # вызываем процедуру формирования обучающего датасета
-        net.learnNet(1)
+        net = net.learnNet(net, 1)
 
     if k == '2':  # 1 цикл обучения с отображением комментариев
         epoch = epoch + 1
         net.setDataset(0)  # вызываем процедуру формирования обучающего датасета
-        net.learnNet(2)
+        net = net.learnNet(net, 2)
 
     if k == '3':  # 1 цикл обучения с отображением структуры и комментариев
         epoch = epoch + 1
         net.setDataset(0)  # вызываем процедуру формирования обучающего датасета
-        net.learnNet(3)
+        net = net.learnNet(net, 3)
 
     if k == '10':  # 10 циклов обучения без отображения
         net.setDataset(0)  # вызываем процедуру формирования обучающего датасета
         epoch = epoch + 10
         for i in range(0, 10):
-            net.learnNet(0)
+            net = net.learnNet(net, 0)
 
     if k == '100':  # 100 циклов обучения без отображения
         net.setDataset(0)  # вызываем процедуру формирования обучающего датасета
         epoch = epoch + 100
         for i in range(0, 100):
-            net.learnNet(0)
+            net = net.learnNet(net, 0)
 
     if k == '1000':  # 1000 циклов обучения без отображения
         net.setDataset(0)  # вызываем процедуру формирования обучающего датасета
         epoch = epoch + 1000
         for i in range(0, 100):
-            net.learnNet(0)
+            net = net.learnNet(net, 0)
 
     if k == '1008':  # 1008 - показать сеть
         net.showNet()
