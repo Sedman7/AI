@@ -1,14 +1,16 @@
 import geneticLib as GL
 
 # создаем первичную нейронную сеть
-net = GL.NN()  # создаем потомок класса
-net.iCreate(4, [8], 1)  # инициализируем сеть
-net.showNet()  # Отобразить нейронку
+net = GL.NN()               # создаем потомок класса
+net.iCreate(4, [8], 1)      # инициализируем сеть
+net.showNet()               # Отобразить нейронку
 
-net.setDataset(1)
-net = net.learnNet(net, 9)
+net.initDataset()           # Инициализируем данные
 
-for i in range(200):
-    net = net.learnNet(net, 0)
+net.setDataset(1)           # устанавливаем дата-сет для тестов
+net = net.learnNet(net, 9)  # обучаем сеть в режиме "9" - т.е. один цикл без обучения, только показать информацию
 
-net = net.learnNet(net, 9)
+for i in range(200):        # обучаем сеть 200 эпох
+    net = net.learnNet(net, 0)  # 0 - в режиме молчания
+
+net = net.learnNet(net, 9)  # смотрим тестовый датасет после обучения

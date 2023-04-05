@@ -160,7 +160,7 @@ class NN:
     def iCreate(self, inValuesP, NeronLayerP, outValuesP):
 
         # инициализируем датасеты
-        self.initDataset()
+        # self.initDataset()
 
         # подготавливаем массивы
         self.prepareArrays(inValuesP, NeronLayerP, outValuesP, -1, 1, 2)
@@ -288,11 +288,6 @@ class NN:
         self.addToDataset(0, [[1, 0, 0, 0], 8])
         self.addToDataset(0, [[1, 0, 0, 1], 9])
         self.addToDataset(0, [[0, 1, 1, 0], 6])
-        # self.learnDataSet.append([[0, 0, 1, 0], 2])
-        # self.learnDataSet.append([[0, 1, 0, 0], 4])
-        # self.learnDataSet.append([[1, 0, 0, 0], 8])
-        # self.learnDataSet.append([[1, 0, 0, 1], 9])
-        # self.learnDataSet.append([[0, 1, 1, 0], 6])
 
         # #заполняем тестовый дата-сет
         self.addToDataset(1, [[0, 1, 1, 1], 7])
@@ -300,11 +295,6 @@ class NN:
         self.addToDataset(1, [[1, 0, 1, 0], 10])
         self.addToDataset(1, [[1, 1, 1, 0], 14])
         self.addToDataset(1, [[1, 1, 1, 1], 15])
-        # self.testDataSet.append([[0, 1, 1, 1], 7])
-        # self.testDataSet.append([[1, 1, 0, 0], 12])
-        # self.testDataSet.append([[1, 0, 1, 0], 10])
-        # self.testDataSet.append([[1, 1, 1, 0], 14])
-        # self.testDataSet.append([[1, 1, 1, 1], 15])
     # -------------------------------------- End of SetDataset --------------------------------------------------------
 
     # ======================================  функция формирования обучающего датасета ================================
