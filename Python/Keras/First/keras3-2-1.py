@@ -24,13 +24,16 @@ y = np.array([[1, 1],
 # Создание модели нейронной сети
 # так как учим сеть конвертировать в десятичную из двоичной и считать функции активации оставляем линейными
 model = Sequential()
-model.add(Dense(2, input_dim=3))   # это значит 3 входящих нейрона, 2 нейрона на выходе
+model.add(Dense(4, input_dim=3))   # это значит 3 входящих нейрона, 4 нейрона на выходе
 model.add(Dense(2))                # еще один слой - вход идет с прошлого слоя, на выходе 2 нейрона
 
+print('Compile model...')
 # Компиляция модели
 model.compile(loss='mean_squared_error', optimizer='sgd')
-              # Обучение модели
-history = model.fit(X, y, epochs=1000)
+
+print('Starting fit...')
+# Обучение модели verbose=0 - не отображать инфо об обучении, эпохах
+history = model.fit(X, y, epochs=500, verbose=0)
 
 # Оценка качества модели на новых данных
 # X_test = np.random.randn(10, 3)
@@ -48,10 +51,10 @@ predicted = model.predict(X_test)
 print(predicted)
 
 # Обучение и проверка величины потерь
-plt.plot(history.history[‘loss’])
-plt.plot(history.history[‘val_loss’])
-plt.title(‘Model loss’)
-plt.ylabel(‘Loss’)
-plt.xlabel(‘Epoch’)
-plt.legend([‘Train’, ‘Test’], loc=’upper left’)
+plt.plot(history.history['loss'])
+#plt.plot(history.history['val_loss'])
+plt.title('Model loss')
+plt.ylabel('Loss')
+plt.xlabel('Epoch')
+plt.legend(['Train', 'Test'], loc='upper right')
 plt.show()
