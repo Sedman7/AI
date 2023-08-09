@@ -14,14 +14,14 @@ y_test_cat = k.utils.to_categorical(y_test, 10)
 
 #k.Flatten(input_shape(28,28,1))  #преобразует массив 28х28х1 в входящий массив из 784 элементов
 
-# plt.figure(figsize=(10,5))
-# for i in range(25):
-#     plt.subplot(5,5,i+1)
-#     plt.xticks([])
-#     plt.yticks([])
-#     plt.imshow(x_train[i], cmap=plt.cm.binary)
+plt.figure(figsize=(5,5))
+for i in range(50):
+    plt.subplot(10,5,i+1)
+    plt.xticks([])
+    plt.yticks([])
+    plt.imshow(x_train[i], cmap=plt.cm.binary)
 
-#plt.show()
+plt.show()
 
 #создаем модель нейронной сети
 # 1-й слой - Flaten - преобразование картинки в массив (двумерного массива в одномерный)
@@ -40,7 +40,9 @@ model.compile(optimizer='adam',
 
 history = model.fit(x_train, y_train_cat, batch_size=32, epochs=5, validation_split=0.2)
 
-model.evaluate(x_test, y_test_cat)
+model.save('digits.h5')
+
+# model=k.models.load_model('digits.h5')
 
 n = 1
 
@@ -56,3 +58,5 @@ while n > 0:
 
     plt.imshow(x_test[n], cmap=plt.cm.binary)
     plt.show()
+
+    print(x_test[n])
