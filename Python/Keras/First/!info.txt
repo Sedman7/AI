@@ -1,0 +1,3 @@
+ставим пакеты:
+pip install tensorflow
+pip install keras

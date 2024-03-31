@@ -14,7 +14,7 @@
 #=====================================================================================================
 
 import numpy as np
-from tensorflow.keras.datasets import mnist     #библиотека рукописных цифр от tensorflow
+# from tensorflow.keras.datasets import mnist     #библиотека рукописных цифр от tensorflow
 import keras as k
 import tkinter as tk
 from PIL import Image, ImageOps, ImageTk
